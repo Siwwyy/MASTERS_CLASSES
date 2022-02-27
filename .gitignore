@@ -743,3 +743,8 @@ Thumbs.db
 
 # Vim temporary files
 .*.swp
+
+
+# OWN IGNORE
+*.vcxproj
+*.vcxproj.filters
