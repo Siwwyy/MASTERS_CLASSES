@@ -1,5 +1,6 @@
 #include <iostream>
 
+float f(const float x);
 
 int main(int argc, char* argv[])
 {
@@ -35,4 +36,9 @@ int main(int argc, char* argv[])
 
 	std::cin.get();
 	return EXIT_SUCCESS;
+}
+
+float f(const float x)
+{
+	return std::exp(-1.f * std::atan(x)) - x;
 }
