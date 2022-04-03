@@ -7,8 +7,8 @@ float f(const float x);
 int main(int argc, char* argv[])
 {
 	float E = 0.00001f;
-	float x1 = -8.f;
-	float x2 = 8.f;
+	float x1 = 1.f;
+	float x2 = 2.f;
 
 	std::cout << std::setprecision(15) << std::fixed;
 
@@ -41,5 +41,8 @@ int main(int argc, char* argv[])
 
 float f(const float x)
 {
-	return std::exp(-1.f * std::atan(x)) - x;
+	//return std::exp(-1.f * std::atan(x)) - x;
+	//return std::log(x) - sqrt(x);
+	return 2 * sinf(x) - std::log(x);
+	//return std::powf(x, 2.f);x;
 }

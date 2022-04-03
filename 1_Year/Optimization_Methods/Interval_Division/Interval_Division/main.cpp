@@ -4,39 +4,9 @@ float f(const float x);
 
 int main(int argc, char* argv[])
 {
-
-
-
-	//while (true)
-	//{
-	//	const float c = a + (b - a / 2.f);
-
-	//	if (std::abs(b - a) <= E)
-	//	{
-	//		std::cout << "X place zero: [ " << a << "," << b << " ]" << '\n';
-	//		break;
-	//	}
-	//	//interval 1
-	//	if ((f(a) > 0.0f && f(c) < 0.f) || (f(a) < 0.f && f(c) > 0.f))
-	//	{
-	//		b = c;
-	//	}
-	//	//interval 2
-	//	else if ((f(c) > 0.0f && f(b) < 0.f) || (f(c) < 0.f && f(b) > 0.f))
-	//	{
-	//		a = c;
-	//	}
-	//	else
-	//	{
-	//		std::cout << "Given function does not have a place zero on X axis\n";
-	//	}
-	//}
-
-
 	float E = 0.00001f;
 	float a = 0.f;
 	float b = 1.5f;
-	const float c{};
 	const float K = (std::sqrt(5.f) - 1.f) / 2.f;
 	float x1 = b - (b - a) * K;
 	float x2 = a + (b - a) * K;
