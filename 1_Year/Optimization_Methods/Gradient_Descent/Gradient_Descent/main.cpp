@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 
 	float x{ 1.f };
 	float y{ 2.f };
-	float alpha{ 0.01f };
+	const float alpha{ 0.01f };
 	const float E{ 0.001f };
 
 	for (std::size_t i = 0; i < 10000; ++i)

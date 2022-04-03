@@ -34,41 +34,51 @@ int main(int argc, char* argv[])
 
 
 	float E = 0.00001f;
-	float x1 = -5.f;
-	float x2 = 10.f;
-	float a = -10.f;
-	float b = 20.f;
+	float a = 0.f;
+	float b = 1.5f;
 	const float c{};
-	const float T = 0.001f;
+	const float K = (std::sqrt(5.f) - 1.f) / 2.f;
+	float x1 = b - (b - a) * K;
+	float x2 = a + (b - a) * K;
+
+
+	std::cout << "a: " << a << ", b: " << b << '\n';
+	std::cout << "x1: " << x1 << ", x2: " << x2 << '\n';
 
 	while (true)
 	{
-		std::cout << a << ' ' << b << '\n';
-		if (f(x2) > f(x1))
-		{
-			b = x2;
-			x2 = x1;
-			x1 = a + (1.f - T) * (b - a);
-		}
-		else if (f(x2) <= f(x1))
+		if (f(x1) > f(x2))
 		{
 			a = x1;
 			x1 = x2;
-			x2 = b + (1.f - T) * (b - a);
+			x2 = a + (b - a) * K;
+		}
+		else if (f(x1) <= f(x2))
+		{
+			const float temp = x1;
+			b = x2;
+			x1 = b - (b - a) * K;
+			x2 = temp;
 		}
 
-		if (std::abs(b - a) <= E)
+		if (std::fabs(b - a) <= E)
 		{
-			std::cout << "X place zero: [ " << a << "," << b << " ]" << '\n';
 			break;
 		}
 	}
 
+	std::cout << '\n';
+	std::cout << "a: " << a << ", b: " << b << '\n';
+	std::cout << "x1: " << x1 << ", x2: " << x2 << '\n';
+	std::cout << "F(" << x1 << ") = " << f(x1) << '\n';
 	std::cin.get();
 	return EXIT_SUCCESS;
 }
 
 float f(const float x)
 {
-	return std::exp(-1.f * std::atan(x)) - x;
+	//return std::exp(-1.f * std::atan(x)) - x;
+	//return std::log(x) - sqrt(x);
+	return 2*sinf(x) - std::log(x);
+	//return std::powf(x, 2.f);
 }
