@@ -12,7 +12,7 @@ float f2(const float x, const float alpha)
 
 int main(int argc, char* argv[])
 {
-	float E = 1e-08f;
+	float E = 1e-06f;
 	float a = 0.2f;
 	float b = 0.6f;
 	float x1 = 0.f;
@@ -30,12 +30,12 @@ int main(int argc, char* argv[])
 		x1 = (a + b) / 2.f;
 		std::cout << "Iteracja: " << iter << " | x: " << x1 << " | f = " << f2(x1, alpha) << " Alpha: " << alpha << '\n';
 		myfile << "Iteracja: " << iter << " | x: " << x1 << " | f = " << f2(x1, alpha) << " Alpha: " << alpha << '\n';
-		if (std::fabs(f2(x1, alpha)) <= E) //L1 Norm, jesli wartosc funkcji jest mniejsza niz Epsilon, wtedy zakoncz dzialanie
+		if (std::fabs(a - b) < E) //L1 Norm, jesli wartosc funkcji jest mniejsza niz Epsilon, wtedy zakoncz dzialanie
 		{
 			break;
 		}
 
-		if(f2(x1, alpha) * f2(a, alpha) < 0.f) //Warunek pierwszy
+		if (f2(x1, alpha) * f2(a, alpha) < 0.f) //Warunek pierwszy
 		{
 			b = x1;
 		}
@@ -53,14 +53,14 @@ int main(int argc, char* argv[])
 	a = 0.2f;
 	b = 0.6f;
 	x1 = 0.f;
-	E = 1e-06f;
+	E = 1e-08f;
 	iter = 0;
 	while (true)
 	{
 		x1 = (a + b) / 2.f;
 		std::cout << "Iteracja: " << iter << " | x: " << x1 << " | f = " << f2(x1, alpha) << " Alpha: " << alpha << '\n';
 		myfile << "Iteracja: " << iter << " | x: " << x1 << " | f = " << f2(x1, alpha) << " Alpha: " << alpha << '\n';
-		if (std::fabs(a - b) < E) //L1 Norm, jesli wartosc funkcji jest mniejsza niz Epsilon, wtedy zakoncz dzialanie
+		if (std::fabs(f2(x1, alpha)) <= E) //L1 Norm, jesli wartosc funkcji jest mniejsza niz Epsilon, wtedy zakoncz dzialanie
 		{
 			break;
 		}

@@ -17,8 +17,10 @@ Iteracja: 14 | x: 0.410828 | f = -1.19209e-07 Alpha: 19
 Iteracja: 15 | x: 0.410822 | f = 4.76837e-07 Alpha: 19
 Iteracja: 16 | x: 0.410825 | f = 2.38419e-07 Alpha: 19
 Iteracja: 17 | x: 0.410826 | f = 0 Alpha: 19
+Iteracja: 18 | x: 0.410827 | f = 0 Alpha: 19
+Iteracja: 19 | x: 0.410827 | f = -1.19209e-07 Alpha: 19
 
-f(0.410826) = 0
+f(0.410827) = -1.19209e-07
 
 | Warunek stopu b) |
 Iteracja: 0 | x: 0.4 | f = 0.00128877 Alpha: 19
@@ -39,7 +41,5 @@ Iteracja: 14 | x: 0.410828 | f = -1.19209e-07 Alpha: 19
 Iteracja: 15 | x: 0.410822 | f = 4.76837e-07 Alpha: 19
 Iteracja: 16 | x: 0.410825 | f = 2.38419e-07 Alpha: 19
 Iteracja: 17 | x: 0.410826 | f = 0 Alpha: 19
-Iteracja: 18 | x: 0.410827 | f = 0 Alpha: 19
-Iteracja: 19 | x: 0.410827 | f = -1.19209e-07 Alpha: 19
 
-f(0.410827) = -1.19209e-07
+f(0.410826) = 0
