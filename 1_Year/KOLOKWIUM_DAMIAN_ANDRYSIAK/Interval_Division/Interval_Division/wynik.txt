@@ -1,0 +1,45 @@
+| Warunek stopu a) |
+Iteracja: 0 | x: 0.4 | f = 0.00128877 Alpha: 19
+Iteracja: 1 | x: 0.5 | f = -0.000612617 Alpha: 19
+Iteracja: 2 | x: 0.45 | f = -0.00238967 Alpha: 19
+Iteracja: 3 | x: 0.425 | f = -0.00126803 Alpha: 19
+Iteracja: 4 | x: 0.4125 | f = -0.000174165 Alpha: 19
+Iteracja: 5 | x: 0.40625 | f = 0.000510454 Alpha: 19
+Iteracja: 6 | x: 0.409375 | f = 0.000156403 Alpha: 19
+Iteracja: 7 | x: 0.410938 | f = -1.18017e-05 Alpha: 19
+Iteracja: 8 | x: 0.410156 | f = 7.15256e-05 Alpha: 19
+Iteracja: 9 | x: 0.410547 | f = 2.96831e-05 Alpha: 19
+Iteracja: 10 | x: 0.410742 | f = 8.9407e-06 Alpha: 19
+Iteracja: 11 | x: 0.41084 | f = -1.43051e-06 Alpha: 19
+Iteracja: 12 | x: 0.410791 | f = 3.69549e-06 Alpha: 19
+Iteracja: 13 | x: 0.410815 | f = 1.19209e-06 Alpha: 19
+Iteracja: 14 | x: 0.410828 | f = -1.19209e-07 Alpha: 19
+Iteracja: 15 | x: 0.410822 | f = 4.76837e-07 Alpha: 19
+Iteracja: 16 | x: 0.410825 | f = 2.38419e-07 Alpha: 19
+Iteracja: 17 | x: 0.410826 | f = 0 Alpha: 19
+
+f(0.410826) = 0
+
+| Warunek stopu b) |
+Iteracja: 0 | x: 0.4 | f = 0.00128877 Alpha: 19
+Iteracja: 1 | x: 0.5 | f = -0.000612617 Alpha: 19
+Iteracja: 2 | x: 0.45 | f = -0.00238967 Alpha: 19
+Iteracja: 3 | x: 0.425 | f = -0.00126803 Alpha: 19
+Iteracja: 4 | x: 0.4125 | f = -0.000174165 Alpha: 19
+Iteracja: 5 | x: 0.40625 | f = 0.000510454 Alpha: 19
+Iteracja: 6 | x: 0.409375 | f = 0.000156403 Alpha: 19
+Iteracja: 7 | x: 0.410938 | f = -1.18017e-05 Alpha: 19
+Iteracja: 8 | x: 0.410156 | f = 7.15256e-05 Alpha: 19
+Iteracja: 9 | x: 0.410547 | f = 2.96831e-05 Alpha: 19
+Iteracja: 10 | x: 0.410742 | f = 8.9407e-06 Alpha: 19
+Iteracja: 11 | x: 0.41084 | f = -1.43051e-06 Alpha: 19
+Iteracja: 12 | x: 0.410791 | f = 3.69549e-06 Alpha: 19
+Iteracja: 13 | x: 0.410815 | f = 1.19209e-06 Alpha: 19
+Iteracja: 14 | x: 0.410828 | f = -1.19209e-07 Alpha: 19
+Iteracja: 15 | x: 0.410822 | f = 4.76837e-07 Alpha: 19
+Iteracja: 16 | x: 0.410825 | f = 2.38419e-07 Alpha: 19
+Iteracja: 17 | x: 0.410826 | f = 0 Alpha: 19
+Iteracja: 18 | x: 0.410827 | f = 0 Alpha: 19
+Iteracja: 19 | x: 0.410827 | f = -1.19209e-07 Alpha: 19
+
+f(0.410827) = -1.19209e-07
