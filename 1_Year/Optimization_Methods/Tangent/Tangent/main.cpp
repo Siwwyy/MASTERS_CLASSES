@@ -7,21 +7,23 @@ float df(const float x);
 
 int main(int argc, char* argv[])
 {
-	float E = 0.00001f;
+	const float E = 1e-06f;
 	float x0 = -8.f;
-
-	std::cout << std::setprecision(15) << std::fixed;
 
 	float f_x0{};
 	float f_x0_prim{};
 	float x1{};
 
+	std::cout << std::setprecision(15) << std::fixed;
+	std::size_t iter = 0;
 	while (true)
 	{
 		//calculate the tangent of f(x)
 		f_x0 = f(x0);
 
-		std::cout << "f(" << x0 << ") = " << f_x0 << std::endl;
+		//std::cout << "f(" << x0 << ") = " << f_x0 << std::endl;
+
+		std::cout << "Iteracja: " << iter << " | x: " << x0 << " | f = " << f_x0 << '\n';
 
 		if(std::fabs(f_x0) < E)
 		{
@@ -37,6 +39,8 @@ int main(int argc, char* argv[])
 		{
 			break;
 		}
+
+		iter++;
 	}
 
 	std::cin.get();

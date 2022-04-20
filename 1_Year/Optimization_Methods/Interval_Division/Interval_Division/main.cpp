@@ -1,46 +1,40 @@
+#include <iomanip>
 #include <iostream>
 
 float f(const float x);
 
 int main(int argc, char* argv[])
 {
-	float E = 0.00001f;
+	const float E = 1e-06f;
 	float a = 0.f;
-	float b = 1.5f;
-	const float K = (std::sqrt(5.f) - 1.f) / 2.f;
-	float x1 = b - (b - a) * K;
-	float x2 = a + (b - a) * K;
+	float b = 3.f;
+	float x1 = 0.f;
 
 
-	std::cout << "a: " << a << ", b: " << b << '\n';
-	std::cout << "x1: " << x1 << ", x2: " << x2 << '\n';
-
-	while (true)
+	std::cout << std::setprecision(15) << std::fixed;
+	std::size_t iter = 0;
+	while (std::fabs(a - b) > E)
 	{
-		if (f(x1) > f(x2))
-		{
-			a = x1;
-			x1 = x2;
-			x2 = a + (b - a) * K;
-		}
-		else if (f(x1) <= f(x2))
-		{
-			const float temp = x1;
-			b = x2;
-			x1 = b - (b - a) * K;
-			x2 = temp;
-		}
+		x1 = (a + b) / 2.f;
+		std::cout << "Iteracja: " << iter << " | x: " << x1 << " | f = " << f(x1) << '\n';
 
-		if (std::fabs(b - a) <= E)
+		if (std::fabs(f(x1)) <= E) //L1 Norm, jesli wartosc funkcji jest mniejsza niz Epsilon, wtedy zakoncz dzialanie
 		{
 			break;
 		}
-	}
+		if(f(x1) * f(a) < 0.f) //Warunek pierwszy
+		{
+			b = x1;
+		}
+		else if(f(x1) * f(b) < 0.f) //Warunek drugi
+		{
+			a = x1;
+		}
 
-	std::cout << '\n';
-	std::cout << "a: " << a << ", b: " << b << '\n';
-	std::cout << "x1: " << x1 << ", x2: " << x2 << '\n';
-	std::cout << "F(" << x1 << ") = " << f(x1) << '\n';
+		iter++;
+	}
+	std::cout << "\n f(" << x1 << ") = " << f(x1) << '\n';
+
 	std::cin.get();
 	return EXIT_SUCCESS;
 }
@@ -49,6 +43,7 @@ float f(const float x)
 {
 	//return std::exp(-1.f * std::atan(x)) - x;
 	//return std::log(x) - sqrt(x);
-	return 2*sinf(x) - std::log(x);
+	//return 2 * sinf(x) - std::log(x);
 	//return std::powf(x, 2.f);
+	return std::atan(std::log(std::powf(x, 3.f) + 1.f) - 3.f);
 }
