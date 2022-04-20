@@ -18,13 +18,13 @@ float d_f2(const float x, const float alpha)
 
 int main(int argc, char* argv[])
 {
-	const float E = 1e-06f;
+	float E = 1e-06f;
 	const float alpha = 19.f;
 	float x0 = 0.3f;
 
-	float f_x0{};
-	float f_x0_prim{};
-	float x1{};
+	float f_x0 = 0.f;
+	float f_x0_prim = 0.f;
+	float x1 = 0.f;
 
 
 	std::ofstream myfile;
@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 
 	std::cout << std::setprecision(15) << std::fixed;
 	std::size_t iter = 0;
+	myfile << "| Warunek stopu a) |\n";
 	while (true)
 	{
 		//calculate the tangent of f(x)
@@ -41,11 +42,6 @@ int main(int argc, char* argv[])
 
 		std::cout << "Iteracja: " << iter << " | x: " << x0 << " | f = " << f_x0 << '\n';
 		myfile << "Iteracja: " << iter << " | x: " << x0 << " | f = " << f_x0 << '\n';
-
-		if(std::fabs(f_x0) < E)
-		{
-			break;
-		}
 
 		f_x0_prim = d_f2(x0, alpha);
 		x1 = x0;
@@ -63,8 +59,45 @@ int main(int argc, char* argv[])
 
 	std::cout << "f(" << x0 << ") = " << f_x0 << std::endl;
 	myfile << "f(" << x0 << ") = " << f_x0 << std::endl;
-	myfile.close();
 
+
+	E = 1e-08f;
+	x0 = 0.3f;
+
+	f_x0 = 0.f;
+	f_x0_prim = 0.f;
+	x1 = 0.f;
+
+
+	iter = 0;
+	myfile << "\n| Warunek stopu b) |\n";
+	while (true)
+	{
+		//calculate the tangent of f(x)
+		f_x0 = f2(x0, alpha);
+
+		//std::cout << "f(" << x0 << ") = " << f_x0 << std::endl;
+
+		std::cout << "Iteracja: " << iter << " | x: " << x0 << " | f = " << f_x0 << '\n';
+		myfile << "Iteracja: " << iter << " | x: " << x0 << " | f = " << f_x0 << '\n';
+
+		if (std::fabs(f_x0) < E)
+		{
+			break;
+		}
+
+		f_x0_prim = d_f2(x0, alpha);
+		x1 = x0;
+		x0 -= f_x0 / f_x0_prim;
+
+		iter++;
+
+	}
+
+	std::cout << "f(" << x0 << ") = " << f_x0 << std::endl;
+	myfile << "f(" << x0 << ") = " << f_x0 << std::endl;
+
+	myfile.close();
 	std::cin.get();
 	return EXIT_SUCCESS;
 }
