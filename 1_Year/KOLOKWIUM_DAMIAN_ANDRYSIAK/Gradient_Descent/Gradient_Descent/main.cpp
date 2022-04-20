@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	}
 
 	std::cout << "X: " << x << " | Y: " << y << '\n';
-	std::cout << "\nf(" << x << ',' << y << ") = " << f(x,y) << std::endl;
+	std::cout << "\nf(" << x << ',' << y << ") = " << f(x, y) << std::endl;
 	myfile << "X: " << x << " | Y: " << y << '\n';
 	myfile << "\nf(" << x << ',' << y << ") = " << f(x, y) << std::endl;
 	myfile.close();
@@ -62,15 +62,15 @@ int main(int argc, char* argv[])
 
 float f(const float x, const float y)
 {
-	return (-1.f * std::powf(x, 2.f) - 3.f * y) * std::exp(-1.f * std::powf(x, 2.f) - std::powf(y, 2.f));
+	return std::logf(std::powf(x, 2.f) + 4.f * std::powf(y, 2.f) + 8.f) - std::expf(-3.f * std::powf(y, 2.f) - std::powf(x, 2.f)) - 3.f * std::expf(-1.f * std::powf((x - 3.f), 2.f) - 3.f * std::powf((y - 4.f), 2.f));
 }
 
 float df_x(const float x, const float y)
 {
-	return 2.f * std::exp(-1.f * std::powf(x, 2.f) - std::powf(y, 2.f)) * x * (-1.f + std::powf(x, 2.f) + 3.f * y);
+	return 2 * x * exp(-pow(x, 2) - 3 * pow(y, 2)) + 6 * (x - 3) * exp(-pow(x - 3, 2) - 3 * pow(y - 4, 2)) + ((2 * x) / (x * x + 4 * y * y + 8));
 }
 
 float df_y(const float x, const float y)
 {
-	return std::exp(-1.f * std::powf(x, 2.f) - std::powf(y, 2.f)) * (-3.f + 2.f * std::powf(x, 2.f) * y + 6.f * std::powf(y, 2.f));
+	return 6 * y * exp(-3 * pow(y, 2) - pow(x, 2)) + 18 * (y - 4) * exp(-3 * pow(y - 4, 2) - pow(x - 3, 2)) + (8 * y / (4 * pow(y, 2) + pow(x, 2) + 8));
 }
