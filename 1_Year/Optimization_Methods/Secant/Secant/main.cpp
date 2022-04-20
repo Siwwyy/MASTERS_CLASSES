@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
@@ -10,9 +11,11 @@ int main(int argc, char* argv[])
 	float x1 = 1.f;
 	float x2 = 2.f;
 
-
 	float y_x1 = f(x1);
 	float y_x2 = f(x2);
+
+	std::ofstream myfile;
+	myfile.open("wynik.txt");
 
 	std::cout << std::setprecision(15) << std::fixed;
 	std::size_t iter = 0;
@@ -25,6 +28,7 @@ int main(int argc, char* argv[])
 		//std::cout << "f(" << x3 << ") = " << y_x2 << std::endl;
 
 		std::cout << "Iteracja: " << iter << " | x: " << x3 << " | f = " << y_x2 << '\n';
+		myfile << "Iteracja: " << iter << " | x: " << x3 << " | f = " << y_x2 << '\n';
 
 		if(std::fabs(y_x3) <= E)
 		{
@@ -40,6 +44,9 @@ int main(int argc, char* argv[])
 		iter++;
 	}
 	std::cout << "\nf(" << x2 << ") = " << y_x2 << std::endl;
+	myfile << "\nf(" << x2 << ") = " << y_x2 << std::endl;
+	myfile.close();
+
 	std::cin.get();
 	return EXIT_SUCCESS;
 }

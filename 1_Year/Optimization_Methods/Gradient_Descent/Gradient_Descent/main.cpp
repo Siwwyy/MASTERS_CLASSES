@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 
 
@@ -8,14 +10,22 @@ float df_y(const float x, const float y);
 
 int main(int argc, char* argv[])
 {
+	float x = 1.f;
+	float y = 1.f;
+	const float alpha = 0.001f;
+	const float E = 1e-06f;
 
-	float x{ 1.f };
-	float y{ 2.f };
-	const float alpha{ 0.01f };
-	const float E{ 0.001f };
+	std::ofstream myfile;
+	myfile.open("wynik.txt");
 
+	std::cout << std::setprecision(15) << std::fixed;
+	std::size_t iter = 0;
 	for (std::size_t i = 0; i < 10000; ++i)
 	{
+
+		std::cout << "Iteracja: " << iter << " | x1: " << x << " | x2: " << y << '\n';
+		myfile << "Iteracja: " << iter << " | x1: " << x << " | x2: " << y << '\n';
+
 		float temp_x = x;
 		float temp_y = y;
 
@@ -37,11 +47,14 @@ int main(int argc, char* argv[])
 		//{
 		//	break;
 		//}
-
+		iter++;
 	}
 
 	std::cout << "X: " << x << " | Y: " << y << '\n';
-
+	std::cout << "\nf(" << x << ',' << y << ") = " << f(x,y) << std::endl;
+	myfile << "X: " << x << " | Y: " << y << '\n';
+	myfile << "\nf(" << x << ',' << y << ") = " << f(x, y) << std::endl;
+	myfile.close();
 
 	std::cin.get();
 	return EXIT_SUCCESS;
