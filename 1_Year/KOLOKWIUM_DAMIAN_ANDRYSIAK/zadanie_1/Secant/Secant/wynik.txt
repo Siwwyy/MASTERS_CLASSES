@@ -1,0 +1,25 @@
+| Warunek stopu a) |
+Iteracja: 0 | x: 0.27933 | f = 2.33293
+Iteracja: 1 | x: 0.251255 | f = 0.0374542
+Iteracja: 2 | x: 0.347323 | f = 0.0529199
+Iteracja: 3 | x: 0.374906 | f = 0.0118051
+Iteracja: 4 | x: 0.398078 | f = 0.00538945
+Iteracja: 5 | x: 0.407409 | f = 0.00154722
+Iteracja: 6 | x: 0.410409 | f = 0.000376463
+Iteracja: 7 | x: 0.41081 | f = 4.43459e-05
+Iteracja: 8 | x: 0.410827 | f = 1.78814e-06
+Iteracja: 9 | x: 0.410827 | f = 0
+
+f(0.410827) = 0
+
+| Warunek stopu b) |
+Iteracja: 0 | x: 0.27933 | f = 2.33293
+Iteracja: 1 | x: 0.251255 | f = 0.0374542
+Iteracja: 2 | x: 0.347323 | f = 0.0529199
+Iteracja: 3 | x: 0.374906 | f = 0.0118051
+Iteracja: 4 | x: 0.398078 | f = 0.00538945
+Iteracja: 5 | x: 0.407409 | f = 0.00154722
+Iteracja: 6 | x: 0.410409 | f = 0.000376463
+Iteracja: 7 | x: 0.41081 | f = 4.43459e-05
+
+f(0.41081) = 1.78814e-06
