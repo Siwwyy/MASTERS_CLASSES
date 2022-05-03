@@ -40,9 +40,9 @@ private:
 	Point<float, nDim> expansion(const Point<float, nDim>& x_r, const Point<float, nDim>& x0) const;
 	Point<float, nDim> contraction(const Point<float, nDim>& x_n_plus1, const Point<float, nDim>& x0) const;
 
+	const float E;
 	std::function<float(Point<float, nDim>)> function;
 	std::vector<Point<float, nDim>> simplex;
-	const float E;
 };
 
 
@@ -91,8 +91,8 @@ T function_3D(Point<T, 3> cords)
 
 template <std::size_t nDim>
 Nelder_Mead_Method<nDim>::Nelder_Mead_Method() :
-	simplex({}),
-	E(1e-06f)
+	E(1e-06f),
+	simplex({})
 {
 	simplex.reserve(nDim + 1); //If Simplex is R^n, then we will use n+1 points
 	if constexpr (nDim == 2)
@@ -343,13 +343,13 @@ Point<float, nDim> Nelder_Mead_Method<nDim>::contraction(const Point<float, nDim
 template <std::size_t nDim>
 void Nelder_Mead_Method<nDim>::shrink()
 {
-	constexpr float zeta = 0.5f;
+	constexpr float delta = 0.5f;
 	const auto x1 = simplex[0];
 	auto shrinked_simplex = simplex;
 
 	for (std::size_t i = 0; i < simplex.size(); ++i)
 	{
-		shrinked_simplex[i] = (shrinked_simplex[i] + x1) * zeta;
+		shrinked_simplex[i] = (shrinked_simplex[i] + x1) * delta;
 	}
 	simplex = std::move(shrinked_simplex);
 }
