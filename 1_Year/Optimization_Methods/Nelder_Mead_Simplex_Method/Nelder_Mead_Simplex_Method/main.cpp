@@ -92,7 +92,7 @@ T function_3D(Point<T, 3> cords)
 template <std::size_t nDim>
 Nelder_Mead_Method<nDim>::Nelder_Mead_Method() :
 	simplex({}),
-	E(1e-6f)
+	E(1e-06f)
 {
 	simplex.reserve(nDim + 1); //If Simplex is R^n, then we will use n+1 points
 	if constexpr (nDim == 2)
