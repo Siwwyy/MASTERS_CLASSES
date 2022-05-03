@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <array>
+#include <cassert>
 
 
 template <typename T, std::size_t nDim, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
@@ -16,7 +17,7 @@ public:
 	~Point() = default;
 
 	Point(const Point& Object) = default;
-	Point& operator=(const Point& Object) = delete;
+	Point& operator=(const Point& Object) = default;
 
 	Point(Point&& Object) noexcept;
 	Point& operator=(Point&& Object) noexcept;
@@ -26,8 +27,17 @@ public:
 	[[nodiscard]] const T& operator[](std::size_t index) const;
 	[[nodiscard]] Point<T, nDim> operator+(const T value);
 	[[nodiscard]] Point<T, nDim>& operator+=(const T value);
+	[[nodiscard]] Point<T, nDim> operator*(const T value);
+	[[nodiscard]] Point<T, nDim>& operator*=(const T value);
 	[[nodiscard]] Point<T, nDim> operator/(const T denominator);
 	[[nodiscard]] Point<T, nDim>& operator/=(const T denominator);
+
+	[[nodiscard]] Point<T, nDim> operator+(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim> operator/(const Point<T, nDim>& denominator);
+	[[nodiscard]] Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
 
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;
@@ -123,6 +133,22 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const T value)
 }
 
 template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator*(const T value)
+{
+	return Point<T, nDim>::operator*=(value);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator*=(const T value)
+{
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] * value;
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
 Point<T, nDim> Point<T, nDim, T0>::operator/(const T denominator)
 {
 	return Point<T, nDim>::operator/=(denominator);
@@ -134,6 +160,57 @@ Point<T, nDim>& Point<T, nDim, T0>::operator/=(const T denominator)
 	for (std::size_t i = 0; i < Coordinates.size(); ++i)
 	{
 		Coordinates[i] = Coordinates[i] / denominator;
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator+(const Point<T, nDim>& rhs)
+{
+	return Point<T, nDim>::operator+=(rhs);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator+=(const Point<T, nDim>& rhs)
+{
+	assert(get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] + rhs[i];
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator*(const Point<T, nDim>& rhs)
+{
+	return Point<T, nDim>::operator*=(rhs);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator*=(const Point<T, nDim>& rhs)
+{
+	assert(get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] * rhs[i];
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator/(const Point<T, nDim>& denominator)
+{
+	return Point<T, nDim>::operator/=(denominator);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator/=(const Point<T, nDim>& denominator)
+{
+	assert(get_dim() <= denominator.get_dim(), "Dimension of this and denominator has to be <=");
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] / denominator[i];
 	}
 	return *this;
 }

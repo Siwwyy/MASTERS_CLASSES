@@ -19,15 +19,20 @@ public:
 	Nelder_Mead_Method(const Nelder_Mead_Method& Object) = default;
 	~Nelder_Mead_Method() = default;
 
-
+	void print_simplex() const;
 	void run();
 
 private:
+
+	void run_2D();
+	void run_3D();
+
 	template <std::size_t dot_dim>
 	float dot_product(const Point<float, dot_dim>& p1, const Point<float, dot_dim>& p2) const;
 	float cross_product2D(const Point<float, 2>& p1, const Point<float, 2>& p2) const;
 	Point<float, 3> cross_product3D(const Point<float, 3>& p1, const Point<float, 3>& p2) const;
 
+	float criterion() const;
 	void sort_simplex();
 	void generate_points();
 	void shrink();
@@ -38,7 +43,6 @@ private:
 
 	std::function<float(float, float)> function;
 	std::vector<Point<float, nDim>> simplex;
-	std::vector<float> y;
 	const float E;
 };
 
@@ -47,28 +51,159 @@ template <std::size_t nDim>
 Nelder_Mead_Method<nDim>::Nelder_Mead_Method() :
 	function(function_2D<float>),
 	simplex({}),
-	y({}),
 	E(1e-6f)
 {
 	simplex.reserve(nDim + 1); //If Simplex is R^n, then we will use n+1 points
-	y.reserve(nDim + 1); //If Simplex is R^n, then we will use n+1 points
-	generate_points();
+	//generate_points();
+}
+
+template <std::size_t nDim>
+void Nelder_Mead_Method<nDim>::print_simplex() const
+{
+	for (std::size_t i = 0; i < simplex.size(); ++i)
+	{
+		std::cout << simplex[i] << '\n';
+	}
 }
 
 template <std::size_t nDim>
 void Nelder_Mead_Method<nDim>::run()
 {
-	while (true)
+	generate_points(); //Create Simplex
+
+	if(nDim == 2)
+	{
+		run_2D();
+	}
+	else
+	{
+		run_3D();
+	}
+
+	print_simplex();
+	std::cout << "END\n";
+}
+
+template <std::size_t nDim>
+void Nelder_Mead_Method<nDim>::run_2D()
+{
+	while (criterion() > E) //No. 7 -> Criterion
 	{
 		sort_simplex();
-		auto x0 = create_centroid();
-		auto x_n_plus1 = *(simplex.end() - 1);
-		auto x_r = reflection(x0, x_n_plus1);
-		auto x_e = expansion(x_r, x0);
-		auto x_c = contraction(x_n_plus1, x0);
 
-		//system("pause");
+		auto x0 = create_centroid();
+		auto& x_1 = simplex[0];
+		auto& x_n = *(simplex.end() - 2);
+		auto& x_n_plus1 = *(simplex.end() - 1);
+
+		//auto x_r = reflection(x0, x_n_plus1);
+		//auto x_c = contraction(x_n_plus1, x0);
+		//auto x_e = expansion(x_r, x0);
+
+		auto x_r = reflection(x0, x_n_plus1);
+		if (function(x_r[0], x_r[1]) < function(x_1[0], x_1[1])) //No. 3
+		{
+			auto x_e = expansion(x_r, x0);
+			if (function(x_e[0], x_e[1]) < function(x_1[0], x_1[1]))
+			{
+				x_n_plus1 = x_e;
+			}
+			else
+			{
+				x_n_plus1 = x_r;
+			}
+		}
+		else if (function(x_n[0], x_n[1]) >= function(x_r[0], x_r[1]) && function(x_r[0], x_r[1]) >= function(x_1[0], x_1[1])) //No. 4
+		{
+			x_n_plus1 = x_r;
+		}
+		else if (function(x_n_plus1[0], x_n_plus1[1]) > function(x_r[0], x_r[1]) && function(x_r[0], x_r[1]) > function(x_n[0], x_n[1])) //No. 5
+		{
+			auto x_c = contraction(x_n_plus1, x0);
+			if (function(x_c[0], x_c[1]) < function(x_n_plus1[0], x_n_plus1[1]))
+			{
+				x_n_plus1 = x_c;
+			}
+			else
+			{
+				shrink();
+			}
+		}
+		else if (function(x_r[0], x_r[1]) > function(x_n_plus1[0], x_n_plus1[1])) //No. 6
+		{
+			auto x_c = contraction(x_n_plus1, x0);
+			if (function(x_c[0], x_c[1]) < function(x_n_plus1[0], x_n_plus1[1]))
+			{
+				x_n_plus1 = x_c;
+			}
+			else
+			{
+				shrink();
+			}
+		}
+		print_simplex();
+		std::cout << '\n';
 	}
+}
+
+template <std::size_t nDim>
+void Nelder_Mead_Method<nDim>::run_3D()
+{
+	//while (criterion() > E) //No. 7 -> Criterion
+	//{
+	//	sort_simplex();
+
+	//	auto x0 = create_centroid();
+	//	auto& x_1 = simplex[0];
+	//	auto& x_n = *(simplex.end() - 2);
+	//	auto& x_n_plus1 = *(simplex.end() - 1);
+
+	//	//auto x_r = reflection(x0, x_n_plus1);
+	//	//auto x_c = contraction(x_n_plus1, x0);
+	//	//auto x_e = expansion(x_r, x0);
+
+	//	auto x_r = reflection(x0, x_n_plus1);
+	//	if (function(x_r[0], x_r[1], x_r[2]) < function(x_1[0], x_1[1], x_1[2])) //No. 3
+	//	{
+	//		auto x_e = expansion(x_r, x0);
+	//		if (function(x_e[0], x_e[1], x_e[2], x_e[2]) < function(x_1[0], x_1[1], x_1[2]))
+	//		{
+	//			x_n_plus1 = x_e;
+	//		}
+	//		else
+	//		{
+	//			x_n_plus1 = x_r;
+	//		}
+	//	}
+	//	else if (function(x_n[0], x_n[1], x_n[2]) >= function(x_r[0], x_r[1], x_r[2]) && function(x_r[0], x_r[1], x_r[2]) >= function(x_1[0], x_1[1], x_1[2])) //No. 4
+	//	{
+	//		x_n_plus1 = x_r;
+	//	}
+	//	else if (function(x_n_plus1[0], x_n_plus1[1], x_n_plus1[2]) > function(x_r[0], x_r[1], x_r[2]) && function(x_r[0], x_r[1], x_r[2]) > function(x_n[0], x_n[1], x_n[2])) //No. 5
+	//	{
+	//		auto x_c = contraction(x_n_plus1, x0);
+	//		if (function(x_c[0], x_c[1], x_c[2]) < function(x_n_plus1[0], x_n_plus1[1], x_n_plus1[2]))
+	//		{
+	//			x_n_plus1 = x_c;
+	//		}
+	//		else
+	//		{
+	//			shrink();
+	//		}
+	//	}
+	//	else if (function(x_r[0], x_r[1], x_r[2]) > function(x_n_plus1[0], x_n_plus1[1], x_n_plus1[2])) //No. 6
+	//	{
+	//		auto x_c = contraction(x_n_plus1, x0);
+	//		if (function(x_c[0], x_c[1], x_c[2]) < function(x_n_plus1[0], x_n_plus1[1], x_n_plus1[2]))
+	//		{
+	//			x_n_plus1 = x_c;
+	//		}
+	//		else
+	//		{
+	//			shrink();
+	//		}
+	//	}
+	//}
 }
 
 template <std::size_t nDim>
@@ -99,13 +234,26 @@ Point<float, 3> Nelder_Mead_Method<nDim>::cross_product3D(const Point<float, 3>&
 }
 
 template <std::size_t nDim>
+float Nelder_Mead_Method<nDim>::criterion() const
+{
+	float result{};
+	auto x0 = create_centroid();
+	for (std::size_t i = 0; i < simplex.size(); ++i)
+	{
+		result += std::powf(function(simplex[i][0], simplex[i][1]) - function(x0[0], x0[1]), 2.f);
+	}
+
+	return std::sqrtf(result / static_cast<float>(simplex.size()));
+}
+
+template <std::size_t nDim>
 void Nelder_Mead_Method<nDim>::sort_simplex()
 {
 	for (std::size_t i = 0; i < simplex.size(); ++i)
 	{
 		for (std::size_t j = 0; j < simplex.size() - 1; ++j)
 		{
-			if (y[j] < y[j + 1])
+			if (function(simplex[j][0], simplex[j][1]) < function(simplex[j + 1][0], simplex[j + 1][1]))
 			{
 				std::swap(simplex[j], simplex[j + 1]);
 			}
@@ -118,9 +266,9 @@ void Nelder_Mead_Method<nDim>::generate_points()
 {
 	if constexpr (nDim == 2)
 	{
-		const Point<float, 3> p1({ 0.f, 0.f, 0.f });
-		const Point<float, 3> p2({ 2.f, 0.f, 0.f });
-		const Point<float, 3> p3({ 1.f, 1.f, 0.f });
+		const Point<float, 3> p1({ 2.f, 3.f, 5.f });
+		const Point<float, 3> p2({ 3.f, 3.f, 5.f });
+		const Point<float, 3> p3({ 4.f, 4.f, 5.f });
 
 		if (dot_product(p3, cross_product3D(p1, p2)) == 0.f)
 		{
@@ -131,16 +279,16 @@ void Nelder_Mead_Method<nDim>::generate_points()
 		simplex.push_back(p2.get_shrink_dim());
 		simplex.push_back(p3.get_shrink_dim());
 
-		y.push_back(function(simplex[0][0], simplex[0][1]));
-		y.push_back(function(simplex[1][0], simplex[1][1]));
-		y.push_back(function(simplex[2][0], simplex[2][1]));
+		//y.push_back(function(simplex[0][0], simplex[0][1]));
+		//y.push_back(function(simplex[1][0], simplex[1][1]));
+		//y.push_back(function(simplex[2][0], simplex[2][1]));
 	}
 	else if constexpr (nDim == 3)
 	{
 		Point<float, 3> p1({ 0.f, 0.f, 0.f });
-		Point<float, 3> p2({ 2.f, 0.f, 0.f });
+		Point<float, 3> p2({ 1.f, 0.f, 0.f });
 		Point<float, 3> p3({ 1.f, 1.f, 0.f });
-		Point<float, 3> p4({ 1.f, 0.f, 0.f });
+		Point<float, 3> p4({ 0.5f, 0.5f, 2.f });
 
 		if (dot_product(p3, cross_product3D(p1, p2)) == 0.f && dot_product(p4, cross_product3D(p2, p3)) == 0.f)
 		{
@@ -152,10 +300,10 @@ void Nelder_Mead_Method<nDim>::generate_points()
 		simplex.push_back(std::move(p3));
 		simplex.push_back(std::move(p4));
 
-		y.push_back(function(simplex[0][0], simplex[0][1], simplex[0][2]));
-		y.push_back(function(simplex[1][0], simplex[1][1], simplex[1][2]));
-		y.push_back(function(simplex[2][0], simplex[2][1], simplex[2][2]));
-		y.push_back(function(simplex[3][0], simplex[3][1], simplex[3][2]));
+		//y.push_back(function(simplex[0][0], simplex[0][1], simplex[0][2]));
+		//y.push_back(function(simplex[1][0], simplex[1][1], simplex[1][2]));
+		//y.push_back(function(simplex[2][0], simplex[2][1], simplex[2][2]));
+		//y.push_back(function(simplex[3][0], simplex[3][1], simplex[3][2]));
 	}
 	else
 	{
@@ -228,12 +376,12 @@ template <std::size_t nDim>
 void Nelder_Mead_Method<nDim>::shrink()
 {
 	constexpr float zeta = 0.5f;
-	constexpr auto x1 = simplex[0];
+	const auto x1 = simplex[0];
 	auto shrinked_simplex = simplex;
 
 	for (std::size_t i = 0; i < simplex.size(); ++i)
 	{
-		shrinked_simplex[i] = zeta * (shrinked_simplex[i] + x1);
+		shrinked_simplex[i] = (shrinked_simplex[i] + x1) * zeta;
 	}
 	simplex = std::move(shrinked_simplex);
 }
