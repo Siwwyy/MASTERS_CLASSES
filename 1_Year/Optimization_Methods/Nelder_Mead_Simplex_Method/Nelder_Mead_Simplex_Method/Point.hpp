@@ -25,19 +25,20 @@ public:
 	bool operator==(const Point& rhs) const noexcept;
 	[[nodiscard]] T& operator[](std::size_t index);
 	[[nodiscard]] const T& operator[](std::size_t index) const;
+
 	[[nodiscard]] Point<T, nDim> operator+(const T value);
-	[[nodiscard]] Point<T, nDim>& operator+=(const T value);
 	[[nodiscard]] Point<T, nDim> operator*(const T value);
-	[[nodiscard]] Point<T, nDim>& operator*=(const T value);
 	[[nodiscard]] Point<T, nDim> operator/(const T denominator);
-	[[nodiscard]] Point<T, nDim>& operator/=(const T denominator);
+	Point<T, nDim>& operator+=(const T value);
+	Point<T, nDim>& operator*=(const T value);
+	Point<T, nDim>& operator/=(const T denominator);
 
 	[[nodiscard]] Point<T, nDim> operator+(const Point<T, nDim>& rhs);
-	[[nodiscard]] Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
 	[[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim>& rhs);
-	[[nodiscard]] Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
 	[[nodiscard]] Point<T, nDim> operator/(const Point<T, nDim>& denominator);
-	[[nodiscard]] Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
+	Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
+	Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
+	Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
 
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;

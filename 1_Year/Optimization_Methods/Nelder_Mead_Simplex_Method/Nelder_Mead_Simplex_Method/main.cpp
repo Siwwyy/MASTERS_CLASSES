@@ -49,8 +49,8 @@ private:
 
 int main(int argc, char* argv[])
 {
-	Nelder_Mead_Method<3> D;
-	D.run();
+	Nelder_Mead_Method<2> obj;
+	obj.run();
 
 	std::cin.get();
 	return EXIT_SUCCESS;
@@ -65,7 +65,8 @@ T function_2D(Point<T, 2> cords)
 	const T n = static_cast<T>(1);
 	const T a = static_cast<T>(2);
 	const T b = n + static_cast<T>(5);
-	return std::pow<T>(a - cords[0], 2) + b * std::pow<T>(cords[1] - std::pow<T>(cords[0], 2), 2);
+	//return std::pow<T>(a - cords[0], 2) + b * std::pow<T>(cords[1] - std::pow<T>(cords[0], 2), 2);
+	return std::powf(a - cords[0], 2.f) + b*(std::powf(cords[1] - std::powf(cords[0], 2.f), 2.f));
 }
 
 
@@ -73,7 +74,7 @@ template <typename T>
 T function_3D(Point<T, 3> cords)
 {
 	const T n = static_cast<T>(1);
-	const T a = static_cast<T>(2);
+	const T a = static_cast<T>(1);
 	const T b = n * static_cast<T>(3);
 	return std::pow<T>(a - cords[0], 2) + b * std::pow<T>(cords[1] - std::pow<T>(cords[0], 2), 2) + //k==1
 		std::pow<T>(a - cords[1], 2) + b * std::pow<T>(cords[2] - std::pow<T>(cords[1], 2), 2); //k==2
@@ -119,10 +120,12 @@ void Nelder_Mead_Method<nDim>::run()
 {
 	generate_points(); //Create Simplex
 
-	while (criterion() > E) //No. 7 -> Criterion
+	std::size_t iter = 0;
+	//while (true) 
+	while (criterion() >= E) //No. 7 -> Criterion
 	{
+		std::cout << criterion() << '\n';
 		sort_simplex();
-
 		auto x0 = create_centroid();
 		auto& x_1 = simplex[0];
 		auto& x_n = *(simplex.end() - 2);
@@ -135,6 +138,7 @@ void Nelder_Mead_Method<nDim>::run()
 		auto x_r = reflection(x0, x_n_plus1);
 		if (function(x_r) < function(x_1)) //No. 3
 		{
+			std::cout << "expansion\n";
 			auto x_e = expansion(x_r, x0);
 			if (function(x_e) < function(x_1))
 			{
@@ -151,6 +155,7 @@ void Nelder_Mead_Method<nDim>::run()
 		}
 		else if (function(x_n_plus1) > function(x_r) && function(x_r) > function(x_n)) //No. 5
 		{
+			std::cout << "Contraction\n";
 			auto x_c = contraction(x_n_plus1, x0);
 			if (function(x_c) < function(x_n_plus1))
 			{
@@ -163,6 +168,7 @@ void Nelder_Mead_Method<nDim>::run()
 		}
 		else if (function(x_r) > function(x_n_plus1)) //No. 6
 		{
+			std::cout << "Contraction\n";
 			auto x_c = contraction(x_n_plus1, x0);
 			if (function(x_c) < function(x_n_plus1))
 			{
@@ -175,6 +181,11 @@ void Nelder_Mead_Method<nDim>::run()
 		}
 		//print_simplex();
 		//std::cout << '\n';
+		std::cin.get();
+
+		//if (criterion() < E) break;  //No. 7 -> Criterion
+
+		std::cout << "Iteration: " << iter++ << '\n';
 	}
 	print_simplex();
 
@@ -204,9 +215,9 @@ float Nelder_Mead_Method<nDim>::cross_product2D(const Point<float, 2>& p1, const
 template <std::size_t nDim>
 Point<float, 3> Nelder_Mead_Method<nDim>::cross_product3D(const Point<float, 3>& p1, const Point<float, 3>& p2) const
 {
-	float x_comp = (p1[1] * p2[2] - p1[2] * p2[1]);
-	float y_comp = (p1[2] * p2[0] - p1[0] * p2[2]);
-	float z_comp = (p1[0] * p2[1] - p1[1] * p2[0]);
+	const float x_comp = (p1[1] * p2[2] - p1[2] * p2[1]);
+	const float y_comp = (p1[2] * p2[0] - p1[0] * p2[2]);
+	const float z_comp = (p1[0] * p2[1] - p1[1] * p2[0]);
 	return Point<float, 3>({ x_comp, y_comp, z_comp });
 }
 
@@ -259,9 +270,9 @@ void Nelder_Mead_Method<nDim>::generate_points()
 	else if constexpr (nDim == 3)
 	{
 		Point<float, 3> p1({ 0.f, 0.f, 0.f });
-		Point<float, 3> p2({ 1.f, 0.f, 0.f });
-		Point<float, 3> p3({ 1.f, 1.f, 0.f });
-		Point<float, 3> p4({ 0.5f, 0.5f, 2.f });
+		Point<float, 3> p2({ 2.f, 0.f, 0.f });
+		Point<float, 3> p3({ 1.f, 2.f, 0.f });
+		Point<float, 3> p4({ 1.f, 1.f, 2.f });
 
 		if (dot_product(p3, cross_product3D(p1, p2)) == 0.f && dot_product(p4, cross_product3D(p2, p3)) == 0.f)
 		{
@@ -286,12 +297,8 @@ Point<float, nDim> Nelder_Mead_Method<nDim>::create_centroid() const
 
 	for (std::size_t i = 0; i < simplex.size() - 1; ++i)
 	{
-		for (std::size_t j = 0; j < nDim; ++j)
-		{
-			x0[j] += simplex[i][j];
-		}
+		x0 += simplex[i];
 	}
-
 	return x0 / static_cast<float>(simplex.size() - 1);
 }
 
@@ -299,7 +306,7 @@ template <std::size_t nDim>
 Point<float, nDim> Nelder_Mead_Method<nDim>::reflection(const Point<float, nDim>& x0,
 	const Point<float, nDim>& x_n_plus1) const
 {
-	constexpr float alpha = 0.5f;
+	constexpr float alpha = 1.f;
 	Point<float, nDim> x_r{};
 
 	for (std::size_t i = 0; i < x_r.get_dim(); ++i)
