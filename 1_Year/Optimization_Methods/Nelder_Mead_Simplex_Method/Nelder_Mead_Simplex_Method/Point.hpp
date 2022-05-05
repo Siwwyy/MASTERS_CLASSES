@@ -40,6 +40,20 @@ public:
 	Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
 	Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
 
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend [[nodiscard]] Point<T, nDim> operator*(const T value, const Point<T, nDim, T0>& rhs);
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend [[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim, T0>& lhs, const T value);
+
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend [[nodiscard]] Point<T, nDim> operator-(const T value, const Point<T, nDim, T0>& rhs);
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend [[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim, T0>& lhs, const T value);
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend [[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim, T0>& lhs, const Point<T, nDim, T0>& rhs);
+
+
+
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;
 
@@ -228,6 +242,38 @@ Point<T, nDim - 1> Point<T, nDim, T0>::get_shrink_dim() const
 	static_assert(nDim > 1, "You cant get point from R^0!, nDim should be > 1");
 	return Point<T, nDim - 1>(&Coordinates[0], &Coordinates[Coordinates.size() - 2]);
 }
+
+//template <typename T, std::size_t nDim, typename T0>
+//inline Point<T, nDim> operator*(const T value, const Point<T, nDim>& rhs)
+//{
+//	return rhs *= value;
+//}
+//
+//template <typename T, std::size_t nDim, typename T0>
+//inline Point<T, nDim> operator*(const Point<T, nDim>& lhs, const T value)
+//{
+//	return lhs *= value;
+//}
+//
+//template <typename T, std::size_t nDim, typename T0>
+//Point<T, nDim> operator-(const T value, const Point<T, nDim>& rhs)
+//{
+//	auto temp = rhs;
+//	rhs -= value;
+//	return rhs *= static_cast<T>(-1);
+//}
+//
+//template <typename T, std::size_t nDim, typename T0>
+//Point<T, nDim> operator-(const Point<T, nDim>& lhs, const T value)
+//{
+//	return lhs -= value;
+//}
+//
+//template <typename T, std::size_t nDim, typename T0>
+//Point<T, nDim> operator-(const Point<T, nDim>& lhs, const Point<T, nDim>& rhs)
+//{
+//	return lhs -= rhs;
+//}
 
 template <typename T, std::size_t nDim, typename T0>
 std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs)
