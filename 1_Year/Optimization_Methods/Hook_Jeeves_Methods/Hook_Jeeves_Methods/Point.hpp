@@ -25,22 +25,56 @@ public:
 	bool operator==(const Point& rhs) const noexcept;
 	[[nodiscard]] T& operator[](std::size_t index);
 	[[nodiscard]] const T& operator[](std::size_t index) const;
+
 	[[nodiscard]] Point<T, nDim> operator+(const T value);
 	[[nodiscard]] Point<T, nDim>& operator+=(const T value);
+
 	[[nodiscard]] Point<T, nDim> operator*(const T value);
 	[[nodiscard]] Point<T, nDim>& operator*=(const T value);
+
 	[[nodiscard]] Point<T, nDim> operator/(const T denominator);
 	[[nodiscard]] Point<T, nDim>& operator/=(const T denominator);
 
 	[[nodiscard]] Point<T, nDim> operator+(const Point<T, nDim>& rhs);
 	[[nodiscard]] Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
+
+	[[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator-=(const Point<T, nDim>& rhs);
+
 	[[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim>& rhs);
 	[[nodiscard]] Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
+
 	[[nodiscard]] Point<T, nDim> operator/(const Point<T, nDim>& denominator);
 	[[nodiscard]] Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
 
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;
+
+
+
+	template <typename T, std::size_t nDim, typename T0>
+	friend Point<T, nDim> operator-(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
+	{
+		assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+		Point<T, nDim> temp;
+		for (std::size_t i = 0; i < lhs.get_dim(); ++i)
+		{
+			temp[i] = lhs[i] - rhs[i];
+		}
+		return temp;
+	}
+
+	template <typename T, std::size_t nDim, typename T0>
+	friend Point<T, nDim> operator+(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
+	{
+		assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+		Point<T, nDim> temp;
+		for (std::size_t i = 0; i < lhs.get_dim(); ++i)
+		{
+			temp[i] = lhs[i] + rhs[i];
+		}
+		return temp;
+	}
 
 	template <typename T, std::size_t nDim, typename T0>
 	friend std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs);
@@ -172,6 +206,23 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const Point<T, nDim>& rhs)
 	for (std::size_t i = 0; i < Coordinates.size(); ++i)
 	{
 		Coordinates[i] = Coordinates[i] + rhs[i];
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator-(const Point<T, nDim>& rhs)
+{
+	return Point<T, nDim>::operator-=(rhs);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator-=(const Point<T, nDim>& rhs)
+{
+	assert(get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] - rhs[i];
 	}
 	return *this;
 }

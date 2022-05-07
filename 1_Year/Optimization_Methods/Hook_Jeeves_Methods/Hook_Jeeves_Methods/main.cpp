@@ -31,6 +31,10 @@ private:
 
 	void generate_points();
 
+	void work_cycle(const Point<float, nDim>& x_b,
+		Point<float, nDim>& x_b0,
+		std::size_t& i,
+		std::size_t& j);
 
 	const float E;
 	std::vector<Point<float, nDim>> points;
@@ -43,6 +47,7 @@ private:
 int main(int argc, char* argv[])
 {
 	Hook_Jeeves_Method<3> D;
+	D.run();
 
 	std::cin.get();
 	return EXIT_SUCCESS;
@@ -106,18 +111,87 @@ Hook_Jeeves_Method<nDim>::Hook_Jeeves_Method() :
 template <std::size_t nDim>
 void Hook_Jeeves_Method<nDim>::run()
 {
-	constexpr float delta = 0.5f;
+	float delta = 0.5f;
 	constexpr float beta = 0.2f;
 
-	std::size_t j = 1;
-	std::size_t i = 1;
-	auto z1 = points[0];
-	auto x_b0 = points[0];
+
+	std::vector<Point<float, nDim>> move_turn{};
+
+	for (std::size_t i = 0; i < nDim; ++i)
+	{
+		Point<float, nDim> temp;
+		temp[i] = 1.f;
+		move_turn.emplace_back(std::move(temp));
+	}
+
+	auto& x0 = points[0];
+	auto& x_b0 = points[0];
 	auto f0 = function(points[0]); //f(x0)
 
-	while (true)
+	std::size_t j = 1;
+	bool condition = true;
+	while (condition)
 	{
-		exit(0);
+		std::cout << function(x_b0) << '\n';
+		std::cin.get();
+		for (std::size_t i = 1; i < nDim; ++i)
+		{
+			auto& d_i = move_turn[i];
+			auto z1 = x0;
+
+			//2)
+			z1 = points[i - 1] + d_i * delta;
+			//3)
+			if (function(z1) < f0)
+			{
+				f0 = function(z1);
+			}
+			else
+			{
+				//4)
+				z1 = points[i - 1] + d_i * 2.f * delta;
+				//5)
+				if (function(z1) < f0)
+				{
+					f0 = function(z1);
+				}
+				else
+				{
+					continue;
+				}
+			}
+			//6
+			if (i < nDim - 1)
+			{
+				continue; //i + 1
+			}
+			if (i == nDim - 1)
+			{
+				if (f0 < function(x0))
+				{
+					const auto x_b = z1;
+					//work_cycle
+					work_cycle(x_b, x_b0, i, j);
+				}
+				else if (std::abs(f0 - function(x0)) < 0.f + E)
+				{
+					//a
+					if (delta < E)
+					{
+						std::cout << "END\n";
+						std::cout << function(points[j - 1]) << '\n';
+						condition = false;
+						break;
+					}
+					//b
+					delta = delta * beta;
+				}
+			}
+
+			//std::cout << function(points[j - 2]) << '\n';
+			//std::cin.get();
+		}
+
 	}
 
 }
@@ -137,4 +211,16 @@ void Hook_Jeeves_Method<nDim>::generate_points()
 		}
 		points.push_back(std::move(temp_point));
 	}
+}
+
+template <std::size_t nDim>
+void Hook_Jeeves_Method<nDim>::work_cycle(const Point<float, nDim>& x_b, Point<float, nDim>& x_b0, std::size_t& i, std::size_t& j)
+{
+	for (; j < nDim; ++j)
+	{
+		points[j] = x_b + (x_b - x_b0);
+	}
+	x_b0 = x_b;
+	j = j + 1;
+	i = 1;
 }
