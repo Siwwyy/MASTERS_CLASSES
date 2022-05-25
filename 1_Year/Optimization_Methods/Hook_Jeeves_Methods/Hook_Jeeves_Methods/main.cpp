@@ -1,4 +1,4 @@
-
+﻿
 #include <iostream>
 #include <cstdlib>
 #include <functional>
@@ -31,23 +31,18 @@ private:
 
 	void generate_points();
 
-	void work_cycle(const Point<float, nDim>& x_b,
-		Point<float, nDim>& x_b0,
-		std::size_t& i,
-		std::size_t& j);
-
 	const float E;
 	std::vector<Point<float, nDim>> points;
 	std::function<float(Point<float, nDim>)> function;
 };
 
-
-
-
 int main(int argc, char* argv[])
 {
 	Hook_Jeeves_Method<3> D;
 	D.run();
+
+	Hook_Jeeves_Method<4> D1;
+	D1.run();
 
 	std::cin.get();
 	return EXIT_SUCCESS;
@@ -94,9 +89,9 @@ Hook_Jeeves_Method<nDim>::Hook_Jeeves_Method() :
 	E(1e-06f),
 	points({})
 {
-	points.reserve(nDim);
+	points.resize(nDim);
+	//points.reserve(nDim);
 	generate_points();
-
 
 	if constexpr (nDim == 3)
 	{
@@ -111,89 +106,221 @@ Hook_Jeeves_Method<nDim>::Hook_Jeeves_Method() :
 template <std::size_t nDim>
 void Hook_Jeeves_Method<nDim>::run()
 {
-	float delta = 0.5f;
+	//float delta = 0.5f;
+	//constexpr float beta = 0.2f;
+
+	//std::vector<Point<float, nDim>> move_turn{};
+	//for (std::size_t i = 0; i < nDim; ++i)
+	//{
+	//	Point<float, nDim> temp;
+	//	temp[i] = 1.f;
+	//	move_turn.emplace_back(std::move(temp));
+	//}
+
+	//auto& x0 = points[0];
+	//auto z1 = x0;
+	//auto& x_b0 = points[0];
+	//auto f0 = function(x0); //f(x0)
+	//auto fb0 = function(x0); //f(x0)
+
+	//std::size_t j = 0;
+	//while (true)
+	//{
+	//	for (std::size_t i = 1; i < move_turn.size(); ++i)
+	//	{
+	//		//2
+	//		points[i] = points[i - 1] + move_turn[i] * delta;
+	//		auto f = function(z1);
+	//		//3
+	//		if (f < f0)
+	//		{
+	//			f0 = f;
+	//			continue;//6
+	//		}
+	//		//4
+	//		z1 = points[i - 1] - move_turn[i] * 2.f * delta;
+	//		f = function(z1);
+	//		//5
+	//		if (f < f0)
+	//		{
+	//			f0 = f;
+	//		}
+	//		//6
+	//	}
+	//	//7
+	//	if (f0 < function(x0))
+	//	{
+	//		auto x_b = z1;
+	//		//8, working cycle
+	//		x0 = x_b + (x_b - x_b0);
+	//		x_b0 = x_b;
+	//		++j;
+	//	}
+	//	else if (std::fabs(f0 - function(x0)) < 0.f + 0.1f) //f0 == function(x0) 
+	//	{
+	//		//a
+	//		if (delta < E)
+	//		{
+	//			std::cout << function(x0) << '\n';
+	//			std::cout << "END\n";
+	//			break;
+	//		}
+	//		//b
+	//		z1 = points[j];
+	//		delta = delta * beta;
+	//	}
+
+	//	std::cout << function(x0) << '\n';
+	//	std::cin.get();
+	//}
+
+
+	//std::vector<Point<float, nDim>> move_turn{};
+	//for (std::size_t i = 0; i < nDim; ++i)
+	//{
+	//	Point<float, nDim> temp;
+	//	temp[i] = 1.f;
+	//	move_turn.emplace_back(std::move(temp));
+	//}
+
+	//Point<float, nDim> x0({ 1.f });
+
+	//float lambda = 0.5f;
+	//constexpr float beta = 0.2f;
+
+	//auto x_b0 = x0;
+	//while (true)
+	//{
+	//	float f_0 = function(x0);
+	//	float f_b0 = f_0;
+	//	Point<float, nDim> xn{};
+	//	for (std::size_t i = 0; i < nDim; ++i)
+	//	{
+	//		//1
+	//		auto x1 = x0 + move_turn[i] * lambda;
+	//		xn = x1;
+	//		float f_t = function(x1);
+	//		//2
+	//		if (f_t < f_0)
+	//		{
+	//			f_0 = f_t;
+	//			break; //6 i++
+	//		}
+	//		//3
+	//		x1 = x0 - move_turn[i] * lambda;
+	//		xn = x1;
+	//		f_t = function(x1);
+	//		//4
+	//		if (f_t < f_0)
+	//		{
+	//			f_0 = f_t;
+	//		}
+	//	}
+	//	//7
+	//	if (f_0 < f_b0)
+	//	{
+	//		auto xb = xn;
+	//		float f_b = f_0;
+
+	//		//working cycle
+	//		x0 = xb + (xb - x_b0);
+	//		f_0 = function(x0);
+	//		x_b0 = xb;
+	//		f_b0 = f_b;
+	//	}
+	//	//else if (std::fabs(f_0 - function(x0)) < 0.f + 0.1f) //f0 == function(x0)
+	//	else
+	//	{
+	//		//9
+	//		if (lambda < E)
+	//		{
+	//			std::cout << "x_b0: " << x_b0 << '\n';
+	//			std::cout << "F: " << f_b0 << '\n';
+	//			std::cout << "END\n";
+	//			break;
+	//		}
+	//		//8
+	//		x0 = x_b0;
+	//		lambda = beta * lambda;
+	//	}
+	//	std::cout << "F: " << f_b0 << '\n';
+	//	//std::cin.get();
+	//}
+
+
+
+
 	constexpr float beta = 0.2f;
+	float delta = 0.5f;
 
 
-	std::vector<Point<float, nDim>> move_turn{};
-
+	std::vector<Point<float, nDim>> di{};
 	for (std::size_t i = 0; i < nDim; ++i)
 	{
 		Point<float, nDim> temp;
 		temp[i] = 1.f;
-		move_turn.emplace_back(std::move(temp));
+		di.emplace_back(std::move(temp));
 	}
 
-	auto& x0 = points[0];
-	auto& x_b0 = points[0];
-	auto f0 = function(points[0]); //f(x0)
-
-	std::size_t j = 1;
-	bool condition = true;
-	while (condition)
+	auto x0 = points[0];
+	auto xb0 = x0;
+	std::size_t j = 0ull;
+	while (true)
 	{
-		std::cout << function(x_b0) << '\n';
-		std::cin.get();
-		for (std::size_t i = 1; i < nDim; ++i)
+		Point<float, nDim> zi{};
+	
+		float f0 = function(x0);
+		for (std::size_t i = 0; i < nDim; ++i)
 		{
-			auto& d_i = move_turn[i];
-			auto z1 = x0;
-
-			//2)
-			z1 = points[i - 1] + d_i * delta;
-			//3)
-			if (function(z1) < f0)
+			//2
+			zi = x0 + (di[i] * delta);
+			float f = function(zi);
+			//3
+			if (f < f0)
 			{
-				f0 = function(z1);
+				f0 = f;
+				break; //6
 			}
-			else
+			//4
+			zi = x0 - (di[i] * delta * 2.f);
+			f = function(zi);
+			//5
+			if (f < f0)
 			{
-				//4)
-				z1 = points[i - 1] + d_i * 2.f * delta;
-				//5)
-				if (function(z1) < f0)
-				{
-					f0 = function(z1);
-				}
-				else
-				{
-					continue;
-				}
+				f0 = f;
+				break; //6
 			}
-			//6
-			if (i < nDim - 1)
-			{
-				continue; //i + 1
-			}
-			if (i == nDim - 1)
-			{
-				if (f0 < function(x0))
-				{
-					const auto x_b = z1;
-					//work_cycle
-					work_cycle(x_b, x_b0, i, j);
-				}
-				else if (std::abs(f0 - function(x0)) < 0.f + E)
-				{
-					//a
-					if (delta < E)
-					{
-						std::cout << "END\n";
-						std::cout << function(points[j - 1]) << '\n';
-						condition = false;
-						break;
-					}
-					//b
-					delta = delta * beta;
-				}
-			}
-
-			//std::cout << function(points[j - 2]) << '\n';
-			//std::cin.get();
 		}
-
+		//7
+		if (f0 < function(x0))
+		{
+			auto xb = zi;
+			//8, working cycle
+			x0 = xb + (xb - xb0);
+			xb0 = xb;
+			j++;
+		}
+		else if (std::fabs(f0 - function(x0)) < 0.f + 0.1f) //if f0 == function(x0)
+		{
+			//a
+			if (delta < E)
+			{
+				//std::cout << zi << '\n';
+				std::cout << "\n";
+				std::cout << "\n";
+				std::cout << "END\n";
+				break;
+			}
+			//b
+			generate_points();
+			x0 = points[0];
+			delta = beta * delta;
+		}
+		//std::cout << "F: " << f0 << '\n';
+		//std::cin.get();
 	}
-
+	std::cout << "F: " << function(xb0) << '\n';
+	std::cout << "Xb0: " << xb0 << '\n';
 }
 
 template <std::size_t nDim>
@@ -209,18 +336,6 @@ void Hook_Jeeves_Method<nDim>::generate_points()
 		{
 			temp_point[j] = distribution(generator);
 		}
-		points.push_back(std::move(temp_point));
+		points[i] = std::move(temp_point);
 	}
-}
-
-template <std::size_t nDim>
-void Hook_Jeeves_Method<nDim>::work_cycle(const Point<float, nDim>& x_b, Point<float, nDim>& x_b0, std::size_t& i, std::size_t& j)
-{
-	for (; j < nDim; ++j)
-	{
-		points[j] = x_b + (x_b - x_b0);
-	}
-	x_b0 = x_b;
-	j = j + 1;
-	i = 1;
 }

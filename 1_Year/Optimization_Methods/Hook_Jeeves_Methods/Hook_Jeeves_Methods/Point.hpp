@@ -52,29 +52,29 @@ public:
 
 
 
-	template <typename T, std::size_t nDim, typename T0>
-	friend Point<T, nDim> operator-(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
-	{
-		assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
-		Point<T, nDim> temp;
-		for (std::size_t i = 0; i < lhs.get_dim(); ++i)
-		{
-			temp[i] = lhs[i] - rhs[i];
-		}
-		return temp;
-	}
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend Point<T, nDim> operator-(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
+	//{
+	//	assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	//	Point<T, nDim> temp;
+	//	for (std::size_t i = 0; i < lhs.get_dim(); ++i)
+	//	{
+	//		temp[i] = lhs[i] - rhs[i];
+	//	}
+	//	return temp;
+	//}
 
-	template <typename T, std::size_t nDim, typename T0>
-	friend Point<T, nDim> operator+(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
-	{
-		assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
-		Point<T, nDim> temp;
-		for (std::size_t i = 0; i < lhs.get_dim(); ++i)
-		{
-			temp[i] = lhs[i] + rhs[i];
-		}
-		return temp;
-	}
+	//template <typename T, std::size_t nDim, typename T0>
+	//friend Point<T, nDim> operator+(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
+	//{
+	//	assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	//	Point<T, nDim> temp;
+	//	for (std::size_t i = 0; i < lhs.get_dim(); ++i)
+	//	{
+	//		temp[i] = lhs[i] + rhs[i];
+	//	}
+	//	return temp;
+	//}
 
 	template <typename T, std::size_t nDim, typename T0>
 	friend std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs);
@@ -95,6 +95,15 @@ Point<T, nDim, T0>::Point(std::initializer_list<T> elems)
 	{
 		Coordinates[i] = *(elems.begin() + i);
 	}
+
+	if (elems.size() < nDim)
+	{
+		for (std::size_t i = elems.size(); i < nDim; ++i)
+		{
+			Coordinates[i] = static_cast<T>(0);
+		}
+	}
+
 }
 
 template <typename T, std::size_t nDim, typename T0>
