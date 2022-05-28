@@ -50,32 +50,6 @@ public:
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;
 
-
-
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend Point<T, nDim> operator-(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
-	//{
-	//	assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
-	//	Point<T, nDim> temp;
-	//	for (std::size_t i = 0; i < lhs.get_dim(); ++i)
-	//	{
-	//		temp[i] = lhs[i] - rhs[i];
-	//	}
-	//	return temp;
-	//}
-
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend Point<T, nDim> operator+(Point<T, nDim, T0> lhs, Point<T, nDim, T0> rhs)
-	//{
-	//	assert(lhs.get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
-	//	Point<T, nDim> temp;
-	//	for (std::size_t i = 0; i < lhs.get_dim(); ++i)
-	//	{
-	//		temp[i] = lhs[i] + rhs[i];
-	//	}
-	//	return temp;
-	//}
-
 	template <typename T, std::size_t nDim, typename T0>
 	friend std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs);
 
@@ -173,7 +147,9 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const T value)
 template <typename T, std::size_t nDim, typename T0>
 Point<T, nDim> Point<T, nDim, T0>::operator*(const T value)
 {
-	return Point<T, nDim>::operator*=(value);
+	auto temp_point(*this);
+	//return Point<T, nDim>::operator*=(value);
+	return temp_point *= value;
 }
 
 template <typename T, std::size_t nDim, typename T0>
@@ -222,7 +198,8 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const Point<T, nDim>& rhs)
 template <typename T, std::size_t nDim, typename T0>
 Point<T, nDim> Point<T, nDim, T0>::operator-(const Point<T, nDim>& rhs)
 {
-	return Point<T, nDim>::operator-=(rhs);
+	auto temp_point(rhs);
+	return Point<T, nDim>::operator-=(temp_point);
 }
 
 template <typename T, std::size_t nDim, typename T0>
