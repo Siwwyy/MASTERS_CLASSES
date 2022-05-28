@@ -27,43 +27,31 @@ public:
 	[[nodiscard]] const T& operator[](std::size_t index) const;
 
 	[[nodiscard]] Point<T, nDim> operator+(const T value);
+	[[nodiscard]] Point<T, nDim>& operator+=(const T value);
+
 	[[nodiscard]] Point<T, nDim> operator*(const T value);
+	[[nodiscard]] Point<T, nDim>& operator*=(const T value);
+
 	[[nodiscard]] Point<T, nDim> operator/(const T denominator);
-	Point<T, nDim>& operator+=(const T value);
-	Point<T, nDim>& operator*=(const T value);
-	Point<T, nDim>& operator/=(const T denominator);
+	[[nodiscard]] Point<T, nDim>& operator/=(const T denominator);
 
 	[[nodiscard]] Point<T, nDim> operator+(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
+
+	[[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator-=(const Point<T, nDim>& rhs);
+
 	[[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim>& rhs);
+	[[nodiscard]] Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
+
 	[[nodiscard]] Point<T, nDim> operator/(const Point<T, nDim>& denominator);
-	Point<T, nDim>& operator+=(const Point<T, nDim>& rhs);
-	Point<T, nDim>& operator*=(const Point<T, nDim>& rhs);
-	Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
-
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend [[nodiscard]] Point<T, nDim> operator*(const T value, const Point<T, nDim, T0>& rhs);
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend [[nodiscard]] Point<T, nDim> operator*(const Point<T, nDim, T0>& lhs, const T value);
-
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend [[nodiscard]] Point<T, nDim> operator-(const T value, const Point<T, nDim, T0>& rhs);
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend [[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim, T0>& lhs, const T value);
-	//template <typename T, std::size_t nDim, typename T0>
-	//friend [[nodiscard]] Point<T, nDim> operator-(const Point<T, nDim, T0>& lhs, const Point<T, nDim, T0>& rhs);
-
-
+	[[nodiscard]] Point<T, nDim>& operator/=(const Point<T, nDim>& denominator);
 
 	auto get_dim() const;
 	Point<T, nDim - 1> get_shrink_dim() const;
 
 	template <typename T, std::size_t nDim, typename T0>
 	friend std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs);
-
-	[[noreturn]] void _Xran() const
-	{
-		std::_Xout_of_range("invalid Point<T, nDim> subscript");
-	}
 
 private:
 	std::array<T, nDim> Coordinates;
@@ -81,6 +69,15 @@ Point<T, nDim, T0>::Point(std::initializer_list<T> elems)
 	{
 		Coordinates[i] = *(elems.begin() + i);
 	}
+
+	if (elems.size() < nDim)
+	{
+		for (std::size_t i = elems.size(); i < nDim; ++i)
+		{
+			Coordinates[i] = static_cast<T>(0);
+		}
+	}
+
 }
 
 template <typename T, std::size_t nDim, typename T0>
@@ -150,7 +147,8 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const T value)
 template <typename T, std::size_t nDim, typename T0>
 Point<T, nDim> Point<T, nDim, T0>::operator*(const T value)
 {
-	return Point<T, nDim>::operator*=(value);
+	auto temp_point(*this);
+	return temp_point *= value;
 }
 
 template <typename T, std::size_t nDim, typename T0>
@@ -192,6 +190,24 @@ Point<T, nDim>& Point<T, nDim, T0>::operator+=(const Point<T, nDim>& rhs)
 	for (std::size_t i = 0; i < Coordinates.size(); ++i)
 	{
 		Coordinates[i] = Coordinates[i] + rhs[i];
+	}
+	return *this;
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim> Point<T, nDim, T0>::operator-(const Point<T, nDim>& rhs)
+{
+	auto temp_point(rhs);
+	return Point<T, nDim>::operator-=(temp_point);
+}
+
+template <typename T, std::size_t nDim, typename T0>
+Point<T, nDim>& Point<T, nDim, T0>::operator-=(const Point<T, nDim>& rhs)
+{
+	assert(get_dim() <= rhs.get_dim(), "Dimension of this and rhs has to be <=");
+	for (std::size_t i = 0; i < Coordinates.size(); ++i)
+	{
+		Coordinates[i] = Coordinates[i] - rhs[i];
 	}
 	return *this;
 }
@@ -242,38 +258,6 @@ Point<T, nDim - 1> Point<T, nDim, T0>::get_shrink_dim() const
 	static_assert(nDim > 1, "You cant get point from R^0!, nDim should be > 1");
 	return Point<T, nDim - 1>(&Coordinates[0], &Coordinates[Coordinates.size() - 2]);
 }
-
-//template <typename T, std::size_t nDim, typename T0>
-//inline Point<T, nDim> operator*(const T value, const Point<T, nDim>& rhs)
-//{
-//	return rhs *= value;
-//}
-//
-//template <typename T, std::size_t nDim, typename T0>
-//inline Point<T, nDim> operator*(const Point<T, nDim>& lhs, const T value)
-//{
-//	return lhs *= value;
-//}
-//
-//template <typename T, std::size_t nDim, typename T0>
-//Point<T, nDim> operator-(const T value, const Point<T, nDim>& rhs)
-//{
-//	auto temp = rhs;
-//	rhs -= value;
-//	return rhs *= static_cast<T>(-1);
-//}
-//
-//template <typename T, std::size_t nDim, typename T0>
-//Point<T, nDim> operator-(const Point<T, nDim>& lhs, const T value)
-//{
-//	return lhs -= value;
-//}
-//
-//template <typename T, std::size_t nDim, typename T0>
-//Point<T, nDim> operator-(const Point<T, nDim>& lhs, const Point<T, nDim>& rhs)
-//{
-//	return lhs -= rhs;
-//}
 
 template <typename T, std::size_t nDim, typename T0>
 std::ostream& operator<<(std::ostream& lhs, const Point<T, nDim, T0>& rhs)

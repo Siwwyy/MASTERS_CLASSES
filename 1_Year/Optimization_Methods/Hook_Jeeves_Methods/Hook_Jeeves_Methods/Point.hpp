@@ -148,7 +148,6 @@ template <typename T, std::size_t nDim, typename T0>
 Point<T, nDim> Point<T, nDim, T0>::operator*(const T value)
 {
 	auto temp_point(*this);
-	//return Point<T, nDim>::operator*=(value);
 	return temp_point *= value;
 }
 

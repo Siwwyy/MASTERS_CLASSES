@@ -172,13 +172,13 @@ void Nelder_Mead_Method<nDim>::run()
 				shrink();
 			}
 		}
-		std::cout << "Iteration: " << iter++ << '\n';
+		//std::cout << "Iteration: " << iter++ << '\n';
 	}
 	print_simplex();
 
-	std::cout << '\n';
-	std::cout << function(simplex[0]);
 	std::cout << "\nEND\n";
+	std::cout << function(simplex[0]) << '\n';
+	std::cout << '\n';
 }
 
 template <std::size_t nDim>
