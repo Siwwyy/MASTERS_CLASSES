@@ -56,8 +56,8 @@ T function_3D(Point<T, 3> cords)
 	const T n = static_cast<T>(1);
 	const T a = static_cast<T>(1);
 	const T b = n * static_cast<T>(2);
-	return std::pow<T>(a - cords[0], 2) + b * std::pow<T>(cords[1] - std::pow<T>(cords[0], 2), 2) + //k==1
-		std::pow<T>(a - cords[1], 2) + b * std::pow<T>(cords[2] - std::pow<T>(cords[1], 2), 2); //k==2
+	return std::powf(a - cords[0], 2) + b * std::powf(cords[1] - std::powf(cords[0], 2), 2) + //k==1
+		std::powf(a - cords[1], 2) + b * std::powf(cords[2] - std::powf(cords[1], 2), 2); //k==2
 }
 
 template <typename T>
@@ -66,9 +66,9 @@ T function_4D(Point<T, 4> cords)
 	const T n = static_cast<T>(1);
 	const T a = static_cast<T>(1);
 	const T b = n;
-	return std::pow<T>(a - cords[0], 2) + b * std::pow<T>(cords[1] - std::pow<T>(cords[0], 2), 2) + //k==1
-		std::pow<T>(a - cords[1], 2) + b * std::pow<T>(cords[2] - std::pow<T>(cords[1], 2), 2) + //k==2
-		std::pow<T>(a - cords[2], 2) + b * std::pow<T>(cords[3] - std::pow<T>(cords[2], 2), 2);//k==3
+	return std::powf(a - cords[0], 2) + b * std::powf(cords[1] - std::powf(cords[0], 2), 2) + //k==1
+		std::powf(a - cords[1], 2) + b * std::powf(cords[2] - std::powf(cords[1], 2), 2) + //k==2
+		std::powf(a - cords[2], 2) + b * std::powf(cords[3] - std::powf(cords[2], 2), 2);//k==3
 }
 
 
